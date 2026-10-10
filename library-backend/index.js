@@ -101,6 +101,18 @@ const typeDefs = `
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
   }
+  type Mutation {
+    addBook(
+      title: String!
+      author: String!
+      published: Int!
+      genres: [String!]!
+    ): Book
+    editAuthor(
+      name: String!
+      setBornTo: Int!
+    ): Author
+  }
 `
 
 const resolvers = {
@@ -128,7 +140,34 @@ const resolvers = {
       const count = books.filter(book => book.author === authorName).length
       return count
     }
-  }
+  },
+  Mutation: {
+    addBook: (root, args) => {
+      const newBook = { ...args, id: `${Math.random()}` }
+      books = books.concat(newBook)
+
+      if (!authors.find(author => author.name === args.author)) {
+        const newAuthor = { name: args.author, id: `${Math.random()}` }
+        authors = authors.concat(newAuthor)
+      }
+
+      return newBook
+    },
+    editAuthor: (root, args) => {
+      const authorToEdit = authors.find(author => author.name === args.name)
+
+      if (!authorToEdit) {
+        return null
+      }
+
+      const updatedAuthor = { ...authorToEdit, born: args.setBornTo }
+      authors = authors.map(author =>
+        author.name === args.name ? updatedAuthor : author
+      )
+
+      return updatedAuthor
+    },
+  },
 }
 
 const server = new ApolloServer({

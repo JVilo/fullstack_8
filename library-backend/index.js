@@ -122,6 +122,13 @@ const resolvers = {
     },
     allAuthors: () => authors,
   },
+  Author:{
+    bookCount: (root) => {
+      const authorName = root.name
+      const count = books.filter(book => book.author === authorName).length
+      return count
+    }
+  }
 }
 
 const server = new ApolloServer({

@@ -1,7 +1,7 @@
 require('dotenv').config()
 const mongoose = require('mongoose')
-const Author = require('./models/authors')
-const Book = require('./models/books')
+const Author = require('./models/author')
+const Book = require('./models/book')
 const User = require('./models/user')
 
 const initialUsers = [

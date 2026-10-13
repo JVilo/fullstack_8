@@ -1,6 +1,6 @@
 const { GraphQLError } = require('graphql')
-const Author = require('./models/authors')
-const Book = require('./models/books')
+const Author = require('./models/author')
+const Book = require('./models/book')
 const jwt = require('jsonwebtoken')
 const User = require('./models/user')
 
@@ -141,6 +141,15 @@ const resolvers = {
       }
 
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
+    },
+    _resetDatabase: async () => {
+      if (process.env.NODE_ENV !== 'test') {
+        throw new GraphQLError('_resetDatabase is only available in test mode')
+      }
+      await Author.deleteMany({})
+      await Book.deleteMany({})
+      await User.deleteMany({})
+      return true
     },
   },
 }

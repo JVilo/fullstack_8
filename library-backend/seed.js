@@ -2,6 +2,12 @@ require('dotenv').config()
 const mongoose = require('mongoose')
 const Author = require('./models/authors')
 const Book = require('./models/books')
+const User = require('./models/user')
+
+const initialUsers = [
+  { username: "mluukkai", favoriteGenre: "refactoring" },
+  { username: "tester", favoriteGenre: "agile" },
+]
 
 const initialAuthors = [
   { name: "Robert Martin", born: 1952 },
@@ -63,7 +69,9 @@ const seedDatabase = async () => {
 
     await Book.deleteMany({})
     await Author.deleteMany({})
+    await User.deleteMany({})
 
+    await User.insertMany(initialUsers)
     const savedAuthors = await Author.insertMany(initialAuthors)
 
     const authorMap = {}

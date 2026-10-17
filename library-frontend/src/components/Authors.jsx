@@ -56,23 +56,27 @@ const Authors = ({ show, token }) => {
         <form onSubmit={submit}>
           <h3>Set birthyear</h3>
           <div>
-            name
-            <select value={name} onChange={(event) => setName(event.target.value)}>
-              <option value="">Select an author</option>
-              {authors.map((a) => (
-                <option key={a.id} value={a.name}>
-                  {a.name}
-                </option>
-              ))}
-            </select>
+            <label>
+              name
+              <select name="name" value={name} onChange={(event) => setName(event.target.value)}>
+                <option value="">Select an author</option>
+                {authors.map((a) => (
+                  <option key={a.id} value={a.name}>
+                    {a.name}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
           <div>
-            born
-            <input
-              type="number"
-              value={born}
-              onChange={(event) => setBorn(event.target.value)}
-            />
+            <label>
+              born
+              <input
+                type="number"
+                value={born}
+                onChange={(event) => setBorn(event.target.value)}
+              />
+            </label>
           </div>
           <button type="submit">update author</button>
         </form>

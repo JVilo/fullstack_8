@@ -17,7 +17,7 @@ const LoginForm = ({ show, setToken, setError, setPage }) => {
       setPage('authors')
     },
     onError: (error) => {
-      setError(error.message)
+      setError(`login failed: ${error.message}`)
     }
   })
 
@@ -31,24 +31,28 @@ const LoginForm = ({ show, setToken, setError, setPage }) => {
   }
 
   return (
-    <div>
-      <form onSubmit={submit}>
-        <div>
-          username <input
+    <form onSubmit={submit}>
+      <div>
+        <label>
+          username{' '}
+          <input
             value={username}
             onChange={({ target }) => setUsername(target.value)}
           />
-        </div>
-        <div>
-          password <input
+        </label>
+      </div>
+      <div>
+        <label>
+          password{' '}
+          <input
             type='password'
             value={password}
             onChange={({ target }) => setPassword(target.value)}
           />
-        </div>
-        <button type='submit'>login</button>
-      </form>
-    </div>
+        </label>
+      </div>
+      <button type='submit'>login</button>
+    </form>
   )
 }
 

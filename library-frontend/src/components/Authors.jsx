@@ -6,14 +6,14 @@ const Authors = ({ show }) => {
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
 
-  if (!show) {
-    return null
-  }
-
   const result = useQuery(ALL_AUTHORS)
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [{ query: ALL_AUTHORS }]
   })
+
+  if (!show) {
+    return null
+  }
 
   if (result.loading) {
     return <div>loading...</div>

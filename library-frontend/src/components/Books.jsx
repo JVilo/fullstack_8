@@ -21,14 +21,14 @@ const Books = (props) => {
       <table>
         <tbody>
           <tr>
-            <th></th>
+            <th>title</th>
             <th>author</th>
             <th>published</th>
           </tr>
           {books.map((a) => (
             <tr key={a.id}>
               <td>{a.title}</td>
-              <td>{a.author.name}</td> {/* Fixed: author is now an object with a name */}
+              <td>{a.author.name}</td>
               <td>{a.published}</td>
             </tr>
           ))}

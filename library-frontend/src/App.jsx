@@ -8,6 +8,7 @@ import { useApolloClient } from '@apollo/client/react'
 const App = () => {
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState(localStorage.getItem('library-user-token'))
+  const [errorMessage, setErrorMessage] = useState(null)
   const client = useApolloClient()
 
   const logout = () => {
@@ -22,23 +23,28 @@ const App = () => {
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
-        {token && <button onClick={() => setPage('add')}>add book</button>}
-        {!token ? (
-          <button onClick={() => setPage('login')}>login</button>
+        {token ? (
+          <>
+            <button onClick={() => setPage('add')}>add book</button>
+            <button onClick={logout}>logout</button>
+          </>
         ) : (
-          <button onClick={logout}>logout</button>
+          <button onClick={() => setPage('login')}>login</button>
         )}
       </div>
 
-      <Authors show={page === 'authors'} />
+      {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+
+      <Authors show={page === 'authors'} token={token} />
 
       <Books show={page === 'books'} />
 
-      <NewBook show={page === 'add'} token={token} />
+      <NewBook show={page === 'add'} />
 
       <LoginForm
         show={page === 'login'}
         setToken={setToken}
+        setError={setErrorMessage}
         setPage={setPage}
       />
     </div>

@@ -3,6 +3,9 @@ const Author = require('./models/author')
 const Book = require('./models/book')
 const jwt = require('jsonwebtoken')
 const User = require('./models/user')
+const { PubSub } = require('graphql-subscriptions')
+
+const pubsub = new PubSub()
 
 const resolvers = {
   Query: {
@@ -50,7 +53,7 @@ const resolvers = {
         }
       }
 
-      const book = new Book({
+      let book = new Book({
         title: args.title,
         published: args.published,
         genres: args.genres,
@@ -69,7 +72,11 @@ const resolvers = {
         })
       }
 
-      return book.populate('author')
+      book = await book.populate('author')
+
+      pubsub.publish('BOOK_ADDED', { bookAdded: book })
+
+      return book
     },
     editAuthor: async (root, args, context) => {
       const currentUser = context.currentUser
@@ -147,6 +154,11 @@ const resolvers = {
       await Book.deleteMany({})
       await User.deleteMany({})
       return true
+    },
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterableIterator('BOOK_ADDED'),
     },
   },
 }

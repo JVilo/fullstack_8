@@ -8,7 +8,7 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
 import Recommend from './components/Recommend'
-import { BOOK_ADDED } from './queries'
+import { BOOK_ADDED, ALL_BOOKS } from './queries'
 
 const App = () => {
   const [page, setPage] = useState('authors')
@@ -20,6 +20,20 @@ const App = () => {
     onData: ({ data }) => {
       const addedBook = data.data.bookAdded
       window.alert(`New book added: "${addedBook.title}" by ${addedBook.author.name}`)
+
+      const includedAs = (set, object) => {
+        return set.map(b => b.id).includes(object.id)
+      }
+
+      client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+        if (includedAs(allBooks, addedBook)) {
+          return { allBooks }
+        }
+
+        return {
+          allBooks: allBooks.concat(addedBook),
+        }
+      })
     }
   })
 
